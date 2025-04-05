@@ -1,4 +1,3 @@
-
 #include <limits>
 #include <mutex>
 #include <queue>
@@ -156,9 +155,9 @@ void newResetCollisionLog(PlayerObject* p) {
 
 // SC: Calculates step count based on delta and timewarp.
 int calculateStepCount(float delta, float timewarp, bool forceVanilla) {
-if (!actualDelta || forceVanilla) {
-if (!actualDelta || forceVanilla) {
-    return std::round(std::max(1.0, ((delta * 60.0) / std::min(1.0f, time} else if (legacyBypass) {
+    if (!actualDelta || forceVanilla) {
+        return std::round(std::max(1.0, ((delta * 60.0) / std::min(1.0f, timewarp)) * 4.0));
+    } else if (legacyBypass) {
         return std::round(std::max(4.0, delta * 240.0) / std::min(1.0f, timewarp));
     } else {
         double animationInterval = cocos2d::CCDirector::sharedDirector()->getAnimationInterval();
@@ -176,55 +175,6 @@ if (!actualDelta || forceVanilla) {
         }
     }
 }
-
-double averageDelta = 0.0;
-bool legacyBypass = false;
-bool actualDelta = false;
-rp)) *} else if (legacyBypass) {
-        return std::round(std::max(4.0, delta * 240.0) / std::min(1.0f, timewarp));
-    } else {
-        double animationInterval = cocos2d::CCDirector::sharedDirector()->getAnimationInterval();
-        averageDelta = (0.05 * delta) + (0.95 * averageDelta);
-
-        bool laggingOneFrame = animationInterval < delta - (1.0 / 240.0);
-        bool laggingManyFrames = averageDelta - animationInterval > 0.0005;
-
-        if (!laggingOneFrame && !laggingManyFrames) {
-            return std::round(std::ceil((animationInterval * 240.0) - 0.0001) / std::min(1.0f, timewarp));
-        } else if (!laggingOneFrame) {
-            return std::round(std::ceil(averageDelta * 240.0) / std::min(1.0f, timewarp));
-        } else {
-            return std::round(std::ceil(delta * 240.0) / std::min(1.0f, timewarp));
-        }
-    }
-}
-
-double averageDelta = 0.0;
-bool legacyBypass = false;
-bool actualDelta = false;
-.0));
-} else if (legacyBypass) {
-        return std::round(std::max(4.0, delta * 240.0) / std::min(1.0f, timewarp));
-    } else {
-        double animationInterval = cocos2d::CCDirector::sharedDirector()->getAnimationInterval();
-        averageDelta = (0.05 * delta) + (0.95 * averageDelta);
-
-        bool laggingOneFrame = animationInterval < delta - (1.0 / 240.0);
-        bool laggingManyFrames = averageDelta - animationInterval > 0.0005;
-
-        if (!laggingOneFrame && !laggingManyFrames) {
-            return std::round(std::ceil((animationInterval * 240.0) - 0.0001) / std::min(1.0f, timewarp));
-        } else if (!laggingOneFrame) {
-            return std::round(std::ceil(averageDelta * 240.0) / std::min(1.0f, timewarp));
-        } else {
-            return std::round(std::ceil(delta * 240.0) / std::min(1.0f, timewarp));
-        }
-    }
-}
-
-double averageDelta = 0.0;
-bool legacyBypass = false;
-bool actualDelta = false;
 
 bool safeMode = false;
 
@@ -286,19 +236,11 @@ public:
 
         if (pl) {
             const float timewarp = pl->m_gameState.m_timeWarp;
-if (actualDelta) {
-modifiedDelta = cocos2d::CCDirector::sharedDirector()->getActualDeltaTime() * timewarp; // Usar delta real si actualDelta está activado
+            if (actualDelta) {
+                modifiedDelta = cocos2d::CCDirector::sharedDirector()->getActualDeltaTime() * timewarp;
             }
 
-            stepCounif (actualDelta) {
-modifiedDelta = cocos2d::CCDirector::sharedDirector()->getActualDeltaTime() * timewarp; // Usar delta real si actualDelta está activado
-            }
-
-t = calculatstepCounif (actualDelta) {
-modifiedDelta = cocos2d::CCDirector::sharedDirector()->getActualDeltaTime() * timewarp; // Usar delta real si actualDelta está activado
-            }
-
-tt(modifiedDelta, timewarp, false);
+            stepCount = calculateStepCount(modifiedDelta, timewarp, false);
 
             if (pl->m_player1->m_isDead) {
                 enableInput = true;
@@ -308,8 +250,8 @@ tt(modifiedDelta, timewarp, false);
             } else {
                 skipUpdate = true;
             }
-        } else if (actualDelta) {
-            stepCoif (actualDelta) unt = calculatstepCoif (actualDelta) untt(modifiedDelta, this->m_gameState.m_timeWarp, true);
+        } else {
+            stepCount = calculateStepCount(modifiedDelta, this->m_gameState.m_timeWarp, true);
         }
 
         return modifiedDelta;
