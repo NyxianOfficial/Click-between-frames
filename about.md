@@ -10,6 +10,9 @@
 - **Safe Mode**: Prevents progress and stats from being saved on rated levels.
 - **Late Input Cutoff**: Reduces input lag by checking inputs near the end of the frame.
 - **Enable Physics Bypass**: Reduces stuttering on certain FPS values (use with caution).
+- **Physics Bypass Mode**: Choose between 2.1 and 2.2 physics bypass modes for customized gameplay.
+- **Higher Physics Frequencies**: Supports up to 360Hz physics calculations for smoother gameplay.
+- **Mouse Fix**: Experimental feature to reduce lag with high polling rate mice.
 
 ---
 
